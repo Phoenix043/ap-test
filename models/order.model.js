@@ -19,12 +19,12 @@ const orderSchema = mongoose.Schema({
         default: 1,
       },
     
-      address: {
-        pincode: { type: String, required: true },
+      address: [{
+        pincode: { type: Number, required: true },
         state: { type: String, required: true }, 
         city: { type: String, required: true }, 
         road_name: { type: String, required: true },
-      },
+      }],
 
       status: {
         type: String,

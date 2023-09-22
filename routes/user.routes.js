@@ -19,7 +19,7 @@ UserRouter.post("/login", login);
 UserRouter.use(Authentication);
 
 UserRouter.get("/details", details);
-UserRouter.post("/logout", logout);
+UserRouter.get("/logout", logout);
 
 // Export the UserRouter to be used in other parts of the application
 module.exports = { UserRouter };

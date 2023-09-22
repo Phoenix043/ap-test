@@ -1,8 +1,8 @@
 const jwt=require("jsonwebtoken")
-const bcrypt=require("bcrypt")
-const UserModel = require("../models/user.model")
+const bcrypt=require("bcrypt");
+const UserModel = require("../models/user.model");
 const saltRounds=+process.env.saltRounds
-
+const SECRET_KEY=process.env.SECRET_KEY
 /**
  * @swagger
  * tags:
@@ -36,7 +36,7 @@ const saltRounds=+process.env.saltRounds
  *                 format: password
  *                 description: User's password for authentication.
  *               phone:
- *                 type: string
+ *                 type: number
  *                 description: User's phone number.
  *     responses:
  *       201:
@@ -48,6 +48,7 @@ const saltRounds=+process.env.saltRounds
  *       500:
  *         description: Internal server error. Please try again later.
  */
+
 
 exports.signUp = async (req, res) => {
   const { name, email, password, phone } = req.body;
@@ -121,7 +122,7 @@ exports.signUp = async (req, res) => {
  *                   type: string
  *                   description: A message indicating successful login.
  *                 userInfo:
- *                   $ref: '#/components/schemas/User' # Reference to the User schema.
+ *                   
  *       401:
  *         description: Unauthorized. Wrong credentials provided.
  *       404:
@@ -198,12 +199,13 @@ exports.login = async (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User' # Reference to the User schema.
+ *               
  *       401:
  *         description: Unauthorized. User not found.
  *       500:
  *         description: Internal server error. Please try again later.
  */
+
 
 exports.details = async (req, res) => {
   const userID = req.query.userID;
@@ -236,7 +238,7 @@ exports.details = async (req, res) => {
 /**
  * @swagger
  * /user/logout:
- *   post:
+ *   get:
  *     summary: Logout the user
  *     tags: [Authentication]
  *     responses:
@@ -251,7 +253,7 @@ exports.details = async (req, res) => {
 exports.logout = async (req, res) => {
   try {
     const { AccessToken } = req.cookies;
-
+    
     if (!AccessToken) {
       return res.status(400).send({ message: "You are already logged out" });
     }

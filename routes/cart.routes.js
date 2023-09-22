@@ -10,7 +10,7 @@ const CartRouter = express.Router();
 // Apply the Authentication middleware to all routes in this router
 CartRouter.use(Authentication);
 
-CartRouter.get("/", cartItems);
+CartRouter.get("/items", cartItems);
 
 CartRouter.post("/add", addtoCart);
 
