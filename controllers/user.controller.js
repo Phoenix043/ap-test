@@ -12,7 +12,7 @@ const UserModel = require("../models/user.model")
 
 /**
  * @swagger
- * /auth/signup:
+ * /user/signup:
  *   post:
  *     summary: Register a new user
  *     tags: [Authentication]
