@@ -48,7 +48,7 @@ const options = {
       },
       servers: [
         {
-          url: "https://triveous-ecommerce-api.onrender",
+          url: "https://test-ecommerce-qtec.onrender.com/",
         },
       ],
     },
