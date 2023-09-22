@@ -12,7 +12,7 @@ const saltRounds=process.env.saltRounds
 
 /**
  * @swagger
- * /auth/signup:
+ * /user/signup:
  *   post:
  *     summary: Register a new user
  *     tags: [Authentication]
@@ -66,7 +66,7 @@ exports.signUp = async (req, res) => {
     const user = new UserModel({
       name,
       email,
-      password: hash, // Fixed the variable name (hashedPass to hash)
+      password: hash, 
       phone,
     });
 
@@ -80,47 +80,95 @@ exports.signUp = async (req, res) => {
 };
 
 
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: User authentication operations
+ */
 
-exports.login=async (req, res) => {
-  
+/**
+ * @swagger
+ * /user/login:
+ *   post:
+ *     summary: User login
+ *     tags: [Authentication]
+ *     requestBody:
+ *       description: User login credentials.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address (used for login).
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: User's password for authentication.
+ *     responses:
+ *       200:
+ *         description: Login successful. Returns user information and access token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A message indicating successful login.
+ *                 userInfo:
+ *                   $ref: '#/components/schemas/User' # Reference to the User schema.
+ *       401:
+ *         description: Unauthorized. Wrong credentials provided.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error. Please try again later.
+ */
+
+exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(409).send({ message: "Provide email and password to login" });
+    return res.status(400).send({ message: "Provide email and password to login" });
   }
 
   try {
-    
     const user = await UserModel.findOne({ email });
 
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
 
-    const decode=bcrypt.compareSync(password, user.password)
-      if (!decode) {
-        return res.status(401).send({ message: "Wrong Credentials" });
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).send({ message: "Wrong Credentials" });
+    }
+
+    const expiresIn = 7 * 24 * 60 * 60;
+    const AccessToken = jwt.sign(
+      { userID: user._id, role: "user" },
+      SECRET_KEY,
+      {
+        expiresIn,
       }
+    );
 
-      const expiresIn = 7 * 24 * 60 * 60;
-      const AccessToken = jwt.sign(
-        { userID: user._id, role: "user" },
-        SECRET_KEY,
-        {
-          expiresIn,
-        })
+    res.cookie("AccessToken", AccessToken);
 
-      res.cookie("AccessToken", AccessToken);
-
-      res.status(200).send({
-        message: "Login Successful",
-        userInfo: user,
-      });
-
+    res.status(200).send({
+      message: "Login Successful",
+      userInfo: user,
+    });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
-}
+};
+
 
 
 
