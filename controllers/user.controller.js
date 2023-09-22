@@ -1,7 +1,7 @@
 const jwt=require("jsonwebtoken")
 const bcrypt=require("bcrypt")
 const UserModel = require("../models/user.model")
-
+const saltRounds=process.env.saltRounds
 
 /**
  * @swagger
@@ -12,7 +12,7 @@ const UserModel = require("../models/user.model")
 
 /**
  * @swagger
- * /user/signup:
+ * /auth/signup:
  *   post:
  *     summary: Register a new user
  *     tags: [Authentication]
