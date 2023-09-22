@@ -1,7 +1,7 @@
 const jwt=require("jsonwebtoken")
 const bcrypt=require("bcrypt")
 const UserModel = require("../models/user.model")
-const saltRounds=process.env.saltRounds
+const saltRounds=+process.env.saltRounds
 
 /**
  * @swagger
@@ -172,35 +172,95 @@ exports.login = async (req, res) => {
 
 
 
-exports.details=async (req, res) => {
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: User authentication operations
+ */
 
-    const userID = req.body.userID;
-  
-    try {
-      const user = await UserModel.findOne({ _id: userID });
+/**
+ * @swagger
+ * /user/details:
+ *   get:
+ *     summary: Get user details by ID
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: userID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User's ID to retrieve details.
+ *     responses:
+ *       200:
+ *         description: User details retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User' # Reference to the User schema.
+ *       401:
+ *         description: Unauthorized. User not found.
+ *       500:
+ *         description: Internal server error. Please try again later.
+ */
 
-      if (!user) {
-        return res.status(401).send({ message: "User not found" });
-      }
-  
-      res.status(200).send(user);
-    } catch (error) {
-      res.status(500).send({ message: error.message });
-    }
+exports.details = async (req, res) => {
+  const userID = req.query.userID;
+
+  if (!userID) {
+    return res.status(400).send({ message: "Provide userID to retrieve details" });
   }
 
+  try {
+    const user = await UserModel.findOne({ _id: userID });
 
-exports.logout=async(req,res)=>{
-    try {
-        const{AccessToken}=req.cookies
-        if(!AccessToken) return res.status(400).send({msg:"You are already logged out"}) 
-
-        res.clearCookie("AccessToken");
-
-        return res.status(200).send({msg:"Succesfully loged out"})  
-
-    } catch (error) {
-        return res.status(500).send({msg:error}) 
+    if (!user) {
+      return res.status(401).send({ message: "User not found" });
     }
-}
+
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: User authentication operations
+ */
+
+/**
+ * @swagger
+ * /user/logout:
+ *   post:
+ *     summary: Logout the user
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Logout successful. User is logged out.
+ *       400:
+ *         description: Bad request. User is already logged out (no access token found).
+ *       500:
+ *         description: Internal server error. Please try again later.
+ */
+
+exports.logout = async (req, res) => {
+  try {
+    const { AccessToken } = req.cookies;
+
+    if (!AccessToken) {
+      return res.status(400).send({ message: "You are already logged out" });
+    }
+
+    res.clearCookie("AccessToken");
+
+    res.status(200).send({ message: "Successfully logged out" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
 
