@@ -1,7 +1,7 @@
 // Import required modules
 const express = require("express");
 const { orders, order, allOrders, addOrder, updateOrder, removeOrder } = require("../controllers/order.controller");
-const { Authentication } = require("../Middleware/authentication.middleware");
+const { Authentication } = require("../middleware/authentication.middlewere");
 
 // Create an Express router instance
 const OrdersRouter = express.Router();
