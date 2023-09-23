@@ -1,41 +1,50 @@
 const CategoryModel = require("../models/category.model");
 
 
-
 /**
  * @swagger
  * tags:
  *   name: Category
- *   description: Operations related to managing categories
+ *   description: Operations related to managing product categories
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         category:
+ *           type: string
+ *           description: Name of the product category (must be a string).
  */
 
 /**
  * @swagger
  * /categories/add:
  *   post:
- *     summary: Add a new category
+ *     summary: Add a new product category
  *     tags: [Category]
  *     requestBody:
- *       description: Category information.
+ *       description: Product category information.
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               category:
- *                 type: string
- *                 description: Name of the category (must be a string).
+ *             $ref: '#/components/schemas/Category'
  *     responses:
  *       201:
- *         description: Category added successfully.
+ *         description: Product category added successfully.
  *       400:
- *         description: Bad request. Please provide the category name.
+ *         description: Bad request. Please provide the product category name.
  *       404:
- *         description: Category must be a string.
+ *         description: Product category must be a string.
  *       500:
  *         description: Internal server error. Please try again later.
  */
+
+
 
 module.exports.addCategory = async (req, res) => {
   const category = req.body.category;

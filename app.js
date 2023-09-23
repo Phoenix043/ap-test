@@ -48,7 +48,7 @@ const options = {
       },
       servers: [
         {
-          url: "https://test-ecommerce-qtec.onrender.com",
+          url: "http://localhost:8000",
         },
       ],
     },

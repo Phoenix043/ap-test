@@ -155,18 +155,39 @@ exports.allOrders=async (req, res) => {
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       properties:
+ *         pincode:
+ *           type: number
+ *         state:
+ *           type: string
+ *         city:
+ *           type: string
+ *         road_name:
+ *           type: string
+ *
+ *   parameters:
+ *     ProductIdParam:
+ *       in: path
+ *       name: productId
+ *       description: ID of the product to place an order for
+ *       required: true
+ *       schema:
+ *         type: string
+ */
+
+/**
+ * @swagger
  * /orders/add/{productId}:
  *   post:
  *     summary: Place an Order
  *     description: Place an order for a product in the user's cart. The product will be removed from the user's cart, and the order will be associated with the selected address.
  *     tags: [Orders]
  *     parameters:
- *       - in: path
- *         name: productId
- *         description: ID of the product to place an order for
- *         required: true
- *         schema:
- *           type: string
+ *       - $ref: '#/components/parameters/ProductIdParam'
  *     requestBody:
  *       required: true
  *       content:
@@ -177,16 +198,7 @@ exports.allOrders=async (req, res) => {
  *               addresses:
  *                 type: array
  *                 items:
- *                   type: object
- *                   properties:
- *                     pincode:
- *                       type: number
- *                     state:
- *                       type: string
- *                     city:
- *                       type: string
- *                     road_name:
- *                       type: string
+ *                   $ref: '#/components/schemas/Order'
  *     responses:
  *       '200':
  *         description: Order Placed Successfully
@@ -258,7 +270,7 @@ exports.allOrders=async (req, res) => {
   
       // Find the selected address from the user's address list
       const address = req.body.addresses
-      console.log(address)
+    
 
       // If no address is selected, return a 400 Bad Request status with an error message
       if (!address) {

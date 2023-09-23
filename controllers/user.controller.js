@@ -3,6 +3,8 @@ const bcrypt=require("bcrypt");
 const UserModel = require("../models/user.model");
 const saltRounds=+process.env.saltRounds
 const SECRET_KEY=process.env.SECRET_KEY
+
+
 /**
  * @swagger
  * tags:
@@ -22,22 +24,7 @@ const SECRET_KEY=process.env.SECRET_KEY
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: User's full name.
- *               email:
- *                 type: string
- *                 format: email
- *                 description: User's email address (used for registration).
- *               password:
- *                 type: string
- *                 format: password
- *                 description: User's password for authentication.
- *               phone:
- *                 type: number
- *                 description: User's phone number.
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: User registered successfully.
@@ -47,7 +34,27 @@ const SECRET_KEY=process.env.SECRET_KEY
  *         description: Conflict. Email already registered.
  *       500:
  *         description: Internal server error. Please try again later.
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: User's full name.
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: User's email address (used for registration).
+ *         password:
+ *           type: string
+ *           format: password
+ *           description: User's password for authentication.
+ *         phone:
+ *           type: number
+ *           description: User's phone number.
  */
+
 
 
 exports.signUp = async (req, res) => {

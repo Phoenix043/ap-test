@@ -11,6 +11,35 @@ const ProductModel = require("../models/prodect.model");
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: Title of the product.
+ *         price:
+ *           type: number
+ *           description: Price of the product.
+ *         description:
+ *           type: string
+ *           description: Description of the product.
+ *         availability:
+ *           type: boolean
+ *           description: Availability status of the product (true/false).
+ *         categoryId:
+ *           type: string
+ *           description: ID of the category to which the product belongs. Should be a valid ObjectId.
+ *         images:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Array of image URLs for the product.
+ */
+
+/**
+ * @swagger
  * /products/add:
  *   post:
  *     summary: Add a new product
@@ -21,28 +50,7 @@ const ProductModel = require("../models/prodect.model");
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: Title of the product.
- *               price:
- *                 type: number
- *                 description: Price of the product.
- *               description:
- *                 type: string
- *                 description: Description of the product.
- *               availability:
- *                 type: boolean
- *                 description: Availability status of the product (true/false).
- *               categoryId:
- *                 type: string
- *                 description: ID of the category to which the product belongs. Should be a valid ObjectId.
- *               images:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: Array of image URLs for the product.
+ *             $ref: '#/components/schemas/Product'
  *     responses:
  *       201:
  *         description: Product added successfully.

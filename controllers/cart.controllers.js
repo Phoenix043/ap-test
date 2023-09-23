@@ -84,64 +84,69 @@ exports.cartItems=async (req, res) => {
 
 /**
  * @swagger
- * paths:
- *   /cart/add:
- *     post:
- *       summary: Add Product to User's Cart
- *       description: Add a product to the user's cart.
- *       tags: [Cart]
- *       requestBody:
- *         required: true
+ * components:
+ *   schemas:
+ *     Cart:
+ *       type: object
+ *       properties:
+ *         productId:
+ *           type: string
+ *           description: ID of the product to add to the cart.
+ *         quantity:
+ *           type: number
+ *           default: 1 
+ *           description: Quantity of the product to add to the cart.
+
+ * /cart/add:
+ *   post:
+ *     summary: Add Product to User's Cart
+ *     description: Add a product to the user's cart.
+ *     tags: [Cart]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Cart'
+ *     responses:
+ *       '200':
+ *         description: Product added to the cart successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 productId:
+ *                 message:
  *                   type: string
- *                   description: ID of the product to add to the cart.
- *                 quantity:
- *                   type: number
- *                   default: 1 
- *                   description: Quantity of the product to add to the cart.
- *       responses:
- *         '200':
- *           description: Product added to the cart successfully
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *         '404':
- *           description: User not found or Product is not available
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *         '409':
- *           description: Product already in the cart
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *         '500':
- *           description: Internal Server Error
- *           content:
- *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
+ *       '404':
+ *         description: User not found or Product is not available
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '409':
+ *         description: Product already in the cart
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '500':
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
+
 
 
   exports.addtoCart=async (req, res) => {
@@ -254,6 +259,7 @@ exports.cartItems=async (req, res) => {
  *                 message:
  *                   type: string
  */
+
 
   exports.removeCart=async (req, res) => {
     // Extract the productId from the URL parameter
@@ -491,3 +497,5 @@ exports.cartItems=async (req, res) => {
       return res.status(501).send({ message: error.message });
     }
   }
+
+
